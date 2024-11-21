@@ -3,7 +3,7 @@
   "displayName": "🔥 Firedocs",
   "description": "Crawl and store documentation websites locally in markdown format using Firecrawl",
   "version": "0.1.0",
-  "publisher": "kindship-ai",
+  "publisher": "kindship",
   "private": false,
   "license": "MIT",
   "icon": "resources/icon.png",
