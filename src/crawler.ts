@@ -67,9 +67,13 @@ export class Crawler {
             const urlObj = new URL(url);
             // Get the path segments, keeping only non-empty ones
             const pathParts = urlObj.pathname.split('/').filter(p => p);
-            if (pathParts.length === 0) return undefined;
             
-            // Create pattern with single leading slash and single wildcard
+            // For root URLs (no path segments), return "/*" to match all paths
+            if (pathParts.length === 0) {
+                return '/*';
+            }
+            
+            // For URLs with path segments, create pattern with single leading slash and wildcard
             const pattern = `/${pathParts[0]}/*`;
             
             this.log('Generated URL pattern', {
