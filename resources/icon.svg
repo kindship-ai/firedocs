@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="128" height="128" viewBox="0 0 128 128" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <!-- Background -->
+    <rect width="128" height="128" rx="24" fill="#1E1E1E"/>
+    
+    <!-- Bonfire base -->
+    <path d="M64 108C42.5 108 25 90.5 25 69C25 47.5 42.5 30 64 30C85.5 30 103 47.5 103 69C103 90.5 85.5 108 64 108Z" fill="#2D2D2D"/>
+    
+    <!-- Fire flames -->
+    <path d="M64 35C73 45 78 55 78 65C78 75 73 85 64 95C55 85 50 75 50 65C50 55 55 45 64 35Z" fill="#FF6B6B"/>
+    <path d="M64 40C70 48 74 56 74 64C74 72 70 80 64 88C58 80 54 72 54 64C54 56 58 48 64 40Z" fill="#FFE66D"/>
+    
+    <!-- Document icon -->
+    <path d="M50 75H78M50 83H78M50 91H68" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round"/>
+    
+    <!-- Sparkles -->
+    <circle cx="45" cy="50" r="2" fill="#FFE66D"/>
+    <circle cx="83" cy="50" r="2" fill="#FFE66D"/>
+    <circle cx="64" cy="25" r="2" fill="#FFE66D"/>
+</svg>

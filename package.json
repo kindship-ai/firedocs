@@ -1,13 +1,38 @@
 {
   "name": "firedocs",
-  "displayName": "Firedocs",
-  "description": "VS Code extension for crawling and managing documentation using firecrawl API",
-  "version": "0.0.1",
+  "displayName": "🔥 Firedocs",
+  "description": "Crawl and store documentation websites locally in markdown format using Firecrawl",
+  "version": "0.1.0",
+  "publisher": "kindship-ai",
+  "private": false,
+  "license": "MIT",
+  "icon": "resources/icon.png",
+  "galleryBanner": {
+    "color": "#1E1E1E",
+    "theme": "dark"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/kindship-ai/firedocs"
+  },
+  "bugs": {
+    "url": "https://github.com/kindship-ai/firedocs/issues"
+  },
+  "homepage": "https://github.com/kindship-ai/firedocs#readme",
   "engines": {
     "vscode": "^1.84.0"
   },
   "categories": [
-    "Other"
+    "Other",
+    "Education",
+    "Programming Languages"
+  ],
+  "keywords": [
+    "documentation",
+    "markdown",
+    "crawler",
+    "docs",
+    "firecrawl"
   ],
   "activationEvents": [
     "onCommand:firedocs.crawl",
@@ -95,6 +120,7 @@
     "@vscode/test-electron": "^2.3.6",
     "eslint": "^8.52.0",
     "mocha": "^10.2.0",
+    "svgo": "^3.3.2",
     "ts-loader": "^9.5.0",
     "typescript": "^5.2.2",
     "webpack": "^5.89.0",
