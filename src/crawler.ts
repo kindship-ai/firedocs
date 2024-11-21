@@ -231,6 +231,18 @@ export class Crawler {
                                 docData.metadata?.title
                             );
                             
+                            // Generate content for this document
+                            let content = '';
+                            content += '---\n';
+                            content += `source: ${docData.url}\n`;
+                            content += `title: ${docData.metadata?.title || ''}\n`;
+                            content += `description: ${docData.metadata?.description || ''}\n`;
+                            content += `language: ${docData.metadata?.language || 'en'}\n`;
+                            content += `crawl_date: ${new Date().toISOString()}\n`;
+                            content += `path: ${docData.metadata?.path || ''}\n`;
+                            content += '---\n\n';
+                            content += docData.markdown + '\n\n';
+                            
                             // Write file directly to base output directory
                             const fileUri = vscode.Uri.joinPath(baseOutputUri, filename);
                             const encoder = new TextEncoder();
