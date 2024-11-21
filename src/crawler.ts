@@ -51,11 +51,24 @@ export class Crawler {
 
     private static generateFilename(url: string): string {
         try {
-            // Get the full path from URL
-            const relativePath = this.getRelativePath(url);
+            const urlObj = new URL(url);
+            // Get path segments and filter out empty ones
+            const segments = urlObj.pathname.split('/').filter(p => p);
+            
+            // For root URL, return index.md
+            if (segments.length === 0) {
+                return 'index.md';
+            }
+            
+            // Join all segments with underscores and sanitize
+            const filename = segments
+                .join('_')
+                .toLowerCase()
+                // Replace any non-alphanumeric chars (except underscores) with hyphens
+                .replace(/[^a-z0-9_]/g, '-');
             
             // Add .md extension
-            return `${relativePath}.md`;
+            return `${filename}.md`;
         } catch {
             return 'index.md';
         }
@@ -201,40 +214,23 @@ export class Crawler {
                         content += `description: ${docData.metadata?.description || ''}\n`;
                         content += `language: ${docData.metadata?.language || 'en'}\n`;
                         content += `crawl_date: ${new Date().toISOString()}\n`;
+                        content += `path: ${docData.metadata?.path || ''}\n`;
                         content += '---\n\n';
                         content += docData.markdown + '\n\n';
 
                         try {
                             // Generate filename from source URL
-                            const relativeFile = this.generateFilename(docData.metadata?.sourceURL || docData.url);
+                            const filename = this.generateFilename(docData.metadata?.sourceURL || docData.url);
                             
-                            // Create parent directories if needed
-                            const dirs = relativeFile.split('/');
-                            if (dirs.length > 1) {
-                                const parentDirs = dirs.slice(0, -1).join('/');
-                                const parentUri = vscode.Uri.joinPath(baseOutputUri, parentDirs);
-                                await vscode.workspace.fs.createDirectory(parentUri);
-                            }
-                            
-                            const fileUri = vscode.Uri.joinPath(baseOutputUri, relativeFile);
-
-                            this.log('Writing document file', {
-                                outputFolder: options.outputFolder,
-                                domain: domainFolder,
-                                relativePath: relativeFile,
-                                fullPath: fileUri.fsPath,
-                                title: docData.metadata?.title,
-                                contentLength: content.length
-                            });
-
-                            // Write content to file
+                            // Write file directly to base output directory
+                            const fileUri = vscode.Uri.joinPath(baseOutputUri, filename);
                             const encoder = new TextEncoder();
                             await vscode.workspace.fs.writeFile(fileUri, encoder.encode(content));
-
-                            // Update progress
-                            progress.report({
-                                message: `Crawled ${crawledPages} pages`,
-                                increment: 1
+                            
+                            this.log('Saved document', {
+                                url: docData.url,
+                                filename,
+                                path: fileUri.fsPath
                             });
                         } catch (error) {
                             this.log('Error writing document file', {
