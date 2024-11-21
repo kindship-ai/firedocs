@@ -45,3 +45,16 @@ Test Infrastructure:
       }
   }
   ```
+
+4. API and Documentation
+----------------------
+- Always log API calls and responses for debugging
+- Refer to documentation in /docs when available
+- Document any API changes or additions
+
+5. Version Control
+----------------
+- Commit changes to git when everything looks ok
+- Re-read windsurf/instructions.txt after each git commit
+- Keep commit messages clear and descriptive
+- Follow conventional commit format
