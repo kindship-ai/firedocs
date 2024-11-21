@@ -49,23 +49,42 @@ export class Crawler {
         }
     }
 
-    private static generateFilename(url: string): string {
+    private static generateFilename(url: string, title?: string): string {
         try {
             const urlObj = new URL(url);
             // Get path segments and filter out empty ones
             const segments = urlObj.pathname.split('/').filter(p => p);
             
-            // For root URL, return index.md
-            if (segments.length === 0) {
+            // For root URL with no title, return index.md
+            if (segments.length === 0 && !title) {
                 return 'index.md';
             }
             
-            // Join all segments with underscores and sanitize
-            const filename = segments
+            // Start with path segments
+            let parts = segments;
+            
+            // Add sanitized title if available
+            if (title) {
+                const sanitizedTitle = title
+                    .toLowerCase()
+                    .replace(/[^a-z0-9\s-]/g, '') // Remove special chars except spaces and hyphens
+                    .trim()
+                    .replace(/\s+/g, '-'); // Replace spaces with hyphens
+                
+                // For root URL with title, use just the title
+                if (segments.length === 0) {
+                    parts = [sanitizedTitle];
+                } else {
+                    parts.push(sanitizedTitle);
+                }
+            }
+            
+            // Join all parts with underscores and ensure valid filename
+            const filename = parts
                 .join('_')
-                .toLowerCase()
-                // Replace any non-alphanumeric chars (except underscores) with hyphens
-                .replace(/[^a-z0-9_]/g, '-');
+                .replace(/[^a-z0-9_-]/g, '-') // Replace any remaining invalid chars with hyphens
+                .replace(/-+/g, '-') // Replace multiple hyphens with single hyphen
+                .replace(/^-|-$/g, ''); // Remove leading/trailing hyphens
             
             // Add .md extension
             return `${filename}.md`;
@@ -121,11 +140,10 @@ export class Crawler {
             throw new Error('No workspace folder open');
         }
         
-        // Create the base output folder structure: output_folder/domain_name/
+        // Create the base output folder structure: output_folder/
         const baseOutputUri = vscode.Uri.joinPath(
             workspaceFolders[0].uri,
-            options.outputFolder,
-            domainFolder
+            options.outputFolder
         );
         await vscode.workspace.fs.createDirectory(baseOutputUri);
         
@@ -206,21 +224,12 @@ export class Crawler {
                             crawledPages
                         });
 
-                        // Generate content for this document
-                        let content = '';
-                        content += '---\n';
-                        content += `source: ${docData.url}\n`;
-                        content += `title: ${docData.metadata?.title || ''}\n`;
-                        content += `description: ${docData.metadata?.description || ''}\n`;
-                        content += `language: ${docData.metadata?.language || 'en'}\n`;
-                        content += `crawl_date: ${new Date().toISOString()}\n`;
-                        content += `path: ${docData.metadata?.path || ''}\n`;
-                        content += '---\n\n';
-                        content += docData.markdown + '\n\n';
-
                         try {
-                            // Generate filename from source URL
-                            const filename = this.generateFilename(docData.metadata?.sourceURL || docData.url);
+                            // Generate filename from source URL and title
+                            const filename = this.generateFilename(
+                                docData.metadata?.sourceURL || docData.url,
+                                docData.metadata?.title
+                            );
                             
                             // Write file directly to base output directory
                             const fileUri = vscode.Uri.joinPath(baseOutputUri, filename);
@@ -264,7 +273,7 @@ export class Crawler {
                             });
                             
                             vscode.window.showInformationMessage(
-                                `Documentation crawled successfully! ${crawledPages} pages saved to ${options.outputFolder}/${domainFolder}/`
+                                `Documentation crawled successfully! ${crawledPages} pages saved to ${options.outputFolder}/`
                             );
                             resolve();
                         });
