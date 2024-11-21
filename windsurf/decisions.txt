@@ -1,0 +1,157 @@
+Key Project Decisions
+==================
+
+Initial Infrastructure Decisions (2024-11-20)
+-------------------------------------------
+1. Test Runner Selection
+   - Decision: Use simple, direct test runner configuration
+   - Rationale: Improves reliability and cross-platform compatibility
+   - Impact: Reduced setup complexity and better maintainability
+
+2. Test File Organization
+   - Decision: Implement modular test suite structure
+   - Rationale: Better organization and easier maintenance
+   - Impact: More maintainable and scalable test codebase
+
+3. Development Workflow
+   - Decision: Separate configuration from code with clear documentation
+   - Rationale: Improves maintainability and understanding
+   - Impact: Better developer experience and reduced technical debt
+
+4. Platform Compatibility
+   - Decision: Design platform-agnostic test infrastructure
+   - Rationale: Ensures cross-environment compatibility
+   - Impact: Broader compatibility and easier onboarding
+
+5. Code Quality Standards
+   - Decision: Implement consistent naming and error handling
+   - Rationale: Improves code quality and reduces bugs
+   - Impact: More reliable codebase and easier debugging
+
+6. Testing Strategy
+   - Decision: Focus on critical functionality testing with proper coverage reporting
+   - Rationale: Ensures important features are well-tested while maintaining development efficiency
+   - Impact: Better test coverage for critical paths and improved confidence in changes
+
+SDK Integration Decisions (2024-11-20)
+------------------------------------
+1. Testing Strategy
+   - Decision: Switch from mock-based to real SDK integration tests
+   - Context: Previous mocks required high maintenance
+   - Benefits:
+     * Tests real SDK behavior
+     * Catches interface changes early
+     * Simpler maintenance
+     * Better integration coverage
+   - Tradeoffs:
+     * Requires valid API key
+     * Potentially slower tests
+
+2. Event Handling
+   - Decision: Use SDK's native event system
+   - Context: Real-time crawl progress tracking
+   - Implementation:
+     * 'document' for progress
+     * 'done' for completion
+     * 'error' for failures
+     * Typed CustomEvent handlers
+
+3. Future Features
+   - Decision: Design for upcoming SDK capabilities
+   - Context: Some features (e.g., listCrawls) not yet available
+   - Approach:
+     * Document current limitations
+     * Use JSDoc for clarity
+     * Flexible interface design
+
+Documentation Management Design (2024-11-20)
+-----------------------------------------
+1. Storage Architecture
+   - Decision: Create hierarchical /docs structure
+   - Implementation:
+     * Multi-site storage system
+     * Site-specific subfolders
+     * Versioning support
+     * Automated cleanup for old versions
+   - Rationale: Scalable and maintainable documentation storage
+
+2. DocumentationManager Component
+   - Decision: Create dedicated manager class
+   - Features:
+     * Folder management
+     * Metadata storage
+     * Search indexing
+     * Version control
+   - Rationale: Centralized documentation management
+
+3. Search Implementation
+   - Decision: Build integrated search system
+   - Features:
+     * Full-text search index
+     * Metadata indexing
+     * Quick search functionality
+     * Large dataset support
+   - Rationale: Efficient document retrieval
+
+4. UI Architecture
+   - Decision: Separate UI from core functionality
+   - Components:
+     * Progress indicators
+     * Search interface
+     * Document browser
+     * Site management
+   - Rationale: Clean separation of concerns
+
+5. Testing Strategy
+   - Decision: Comprehensive test coverage
+   - Approach:
+     * Unit tests for DocumentationManager
+     * File system integration tests
+     * Search functionality validation
+     * Performance testing with large datasets
+   - Rationale: Ensure reliability and performance
+
+Documentation Management Implementation (2024-11-21)
+------------------------------------------------
+1. Documentation Storage Approach
+   - Decision: Single markdown file per crawl with metadata headers
+   - Context: Need to store crawled documentation in an easily accessible format
+   - Implementation:
+     * Default storage in /docs folder (configurable)
+     * Intelligent filename generation from URL path
+     * File format:
+       ```markdown
+       ---
+       source: https://docs.replit.com/cloud-services/
+       crawl_date: 2024-11-21
+       subfolder: /cloud-services/
+       ---
+       
+       # Page 1 Title
+       [Content from page 1]
+       
+       ---
+       source: https://docs.replit.com/cloud-services/page2
+       ---
+       
+       # Page 2 Title
+       [Content from page 2]
+       ```
+   - Rationale: 
+     * Simple, flat file structure
+     * Easy to read and search
+     * Metadata preserved for each page
+     * No complex folder hierarchy needed
+     * Compatible with VS Code's markdown preview
+
+2. Crawl Scope Control
+   - Decision: Implement URL path-based crawl restriction
+   - Context: Users need to limit crawls to specific documentation sections
+   - Implementation:
+     * Parse base URL and subfolder path
+     * Validate URLs before crawling
+     * Skip pages outside specified path
+   - Rationale:
+     * Prevents unwanted content
+     * Reduces crawl time
+     * More focused documentation

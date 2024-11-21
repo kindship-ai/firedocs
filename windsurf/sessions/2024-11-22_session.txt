@@ -1,0 +1,65 @@
+Session: November 22, 2024
+Topic: Documentation Organization and File Structure
+
+Changes Made
+===========
+
+1. Split Output by Section
+-------------------------
+- Implemented separate file creation for each documentation page
+- Added file path preservation from source documentation
+- Enhanced filename generation using document titles
+- Added domain-based organization structure
+
+File Changes
+-----------
+/src/crawler.ts:
+- Added getDomainFolder() to create safe folder names from domains
+- Added getRelativePath() to maintain source URL structure
+- Modified generateFilename() to handle nested paths
+- Updated file writing logic to create proper directory structure
+- Enhanced logging with domain and path information
+
+Directory Structure
+------------------
+New organization format:
+output_folder/
+  domain_name/
+    docs/
+      section1/
+        page1.md
+        page2.md
+      section2/
+        subsection/
+          page3.md
+      index.md
+
+Technical Details
+---------------
+- Domain folders are created using sanitized hostnames
+- All documentation is stored under a 'docs' subfolder
+- Original URL paths are preserved under the docs folder
+- Filenames are generated from document titles when available
+- Index files are created for root/section pages
+- Parent directories are automatically created as needed
+
+Testing Notes
+------------
+The new structure has been tested with:
+- Single page documents
+- Multi-section documentation
+- Nested directory structures
+- Various domain names and URL patterns
+
+Next Steps
+---------
+1. Test with various documentation sites
+2. Consider adding metadata about the crawl source
+3. Add support for documentation versioning
+4. Consider adding a table of contents file
+
+Roadmap Updates
+-------------
+- Marked "Split output by section" as completed
+- Added new structure for better organization
+- Maintained all existing functionality while improving organization

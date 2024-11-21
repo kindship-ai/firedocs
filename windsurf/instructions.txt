@@ -1,0 +1,47 @@
+Development Workflow Instructions
+============================
+
+1. Project Structure
+------------------
+- /instructions.txt: General workflow instructions
+- /roadmap.txt: Project milestones and progress
+- /sessions/: Session history logs
+- /decisions.txt: Technical decisions and designs
+- /sdk.txt: SDK documentation
+
+2. Session Management
+-------------------
+At the start of each session:
+- Record date and time
+- Create timestamped session file
+- Review previous sessions
+- Check roadmap progress
+- Document new decisions
+
+3. Development Guidelines
+-----------------------
+Code Standards:
+- Separate configuration from code
+- Use consistent naming
+- Handle errors properly
+- Write critical tests
+- Follow platform practices
+- Consider cross-platform support
+
+Test Infrastructure:
+- Minimal, focused setup
+- Appropriate test runners
+- Careful resource handling
+- Proper type definitions
+- Clear test script structure:
+  ```json
+  {
+      "scripts": {
+          "test": "run tests",
+          "compile-tests": "compile if needed",
+          "pretest": "preparation steps",
+          "test:watch": "watch mode",
+          "test:coverage": "coverage reporting"
+      }
+  }
+  ```

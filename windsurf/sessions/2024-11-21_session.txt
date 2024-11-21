@@ -1,0 +1,125 @@
+Firedocs VS Code Extension Development Session Update
+==============================================================
+
+Recent Changes (Crawl Pattern Fix)
+----------------------------------------
+1. Fixed URL Pattern Generation
+   - Changed pattern from `**/*` to single wildcard `/*`
+   - Added leading slash for API compatibility
+   - Fixed regex pattern format: `/sdks/*`
+   - Added detailed pattern debugging
+
+2. Improved Starting URL Logic
+   - Now uses subfolder URL as starting point
+   - Preserves pattern-based crawl scope
+   - Better handles directory-level crawling
+   - Fixed single-page crawl limitation
+
+3. Enhanced Debug Logging
+   - Added VS Code Output Channel "Firedocs Debug"
+   - Implemented timestamped logging
+   - Added structured data output
+   - Tracks full crawl lifecycle
+
+Technical Implementation Details
+--------------------------------
+### URL Pattern Generation
+```typescript
+private static urlToPattern(url: string): string | undefined {
+    // Get the path segments, keeping only non-empty ones
+    const pathParts = urlObj.pathname.split('/').filter(p => p);
+    // Create pattern with single leading slash and single wildcard
+    const pattern = `/${pathParts[0]}/*`;
+}
+```
+
+### Starting URL Logic
+```typescript
+// Use subfolder as starting URL if provided
+const startingUrl = options.subfolder || options.url;
+
+// Set up crawl options
+const crawlOptions: any = {
+    scrapeOptions: {
+        formats: ['markdown']
+    },
+    includePaths: pattern ? [pattern] : undefined
+};
+```
+
+### Debug Output Format
+```typescript
+this.log('Configured crawl options', {
+    startingUrl,
+    subfolder: options.subfolder,
+    pattern,
+    crawlOptions
+});
+```
+
+Crawl Performance
+----------------
+### Before Fix
+- Only crawled single page
+- Pattern issues with `**/*`
+- Regex errors with double slashes
+
+### After Fix
+- Successfully crawls all pages
+- Example crawl results:
+  - SDKs Overview
+  - Python SDK
+  - Node SDK
+  - Go SDK
+  - Rust SDK
+- Output size: ~25KB markdown
+
+Debug System Features
+-------------------
+1. Real-time Logging
+   - URL pattern generation
+   - Crawl configuration
+   - Document events
+   - Error handling
+   - Completion status
+
+2. Structured Data
+   - Original URLs
+   - Generated patterns
+   - Page counts
+   - Document metadata
+   - Error details
+
+3. Error Handling
+   - Improved TypeScript error handling
+   - Better unknown error type support
+   - Clear error messages
+   - Stack trace preservation
+
+Current State
+------------
+- Full directory crawling working
+- Proper pattern generation
+- Comprehensive debugging
+- Clean error handling
+
+Next Steps
+----------
+1. Potential Improvements:
+   - Progress percentage based on sitemap
+   - Real-time page title updates
+   - Split output by SDK
+   - Enhanced metadata
+
+2. Future Considerations:
+   - Pattern customization
+   - Output format options
+   - Progress indicators
+   - Error recovery
+
+Known Limitations
+----------------
+- Fixed wildcard pattern (`/*`)
+- Single output file
+- Basic progress reporting
+- Limited metadata extraction

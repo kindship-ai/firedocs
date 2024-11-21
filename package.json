@@ -1,0 +1,109 @@
+{
+  "name": "firedocs",
+  "displayName": "Firedocs",
+  "description": "VS Code extension for crawling and managing documentation using firecrawl API",
+  "version": "0.0.1",
+  "engines": {
+    "vscode": "^1.84.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "onCommand:firedocs.crawl",
+    "onCommand:firedocs.configure",
+    "workspaceContains:**/docs/**"
+  ],
+  "main": "./dist/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "firedocs.crawl",
+        "title": "Firedocs: Crawl Documentation",
+        "category": "Firedocs"
+      },
+      {
+        "command": "firedocs.configure",
+        "title": "Firedocs: Configure API Key",
+        "category": "Firedocs"
+      },
+      {
+        "command": "firedocs.viewDocs",
+        "title": "Firedocs: View Documentation",
+        "category": "Firedocs"
+      }
+    ],
+    "configuration": {
+      "title": "Firedocs",
+      "properties": {
+        "firedocs.apiKey": {
+          "type": "string",
+          "default": "",
+          "description": "Firecrawl API Key",
+          "scope": "application"
+        },
+        "firedocs.docsFolder": {
+          "type": "string",
+          "default": "docs",
+          "description": "Relative path to the documentation folder",
+          "scope": "resource"
+        },
+        "firedocs.autoIndex": {
+          "type": "boolean",
+          "default": true,
+          "description": "Automatically index documentation files when they change",
+          "scope": "resource"
+        }
+      }
+    },
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "firedocs-explorer",
+          "title": "Firedocs Documentation",
+          "icon": "$(book)"
+        }
+      ]
+    },
+    "views": {
+      "firedocs-explorer": [
+        {
+          "id": "firedocsExplorer",
+          "name": "Documentation"
+        }
+      ]
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run package",
+    "compile": "webpack",
+    "watch": "webpack --watch",
+    "package": "webpack --mode production --devtool hidden-source-map",
+    "compile-tests": "tsc -p . --outDir out",
+    "watch-tests": "tsc -p . -w --outDir out",
+    "pretest": "npm run compile-tests && npm run compile && npm run lint",
+    "lint": "eslint src --ext ts",
+    "test": "mocha out/test/suite/index.js"
+  },
+  "devDependencies": {
+    "@types/mocha": "^10.0.3",
+    "@types/node": "18.x",
+    "@types/sinon": "^17.0.3",
+    "@types/vscode": "^1.84.0",
+    "@typescript-eslint/eslint-plugin": "^6.9.0",
+    "@typescript-eslint/parser": "^6.9.0",
+    "@vscode/test-electron": "^2.3.6",
+    "eslint": "^8.52.0",
+    "mocha": "^10.2.0",
+    "ts-loader": "^9.5.0",
+    "typescript": "^5.2.2",
+    "webpack": "^5.89.0",
+    "webpack-cli": "^5.1.4"
+  },
+  "dependencies": {
+    "@mendable/firecrawl-js": "latest",
+    "axios": "^1.7.7",
+    "bufferutil": "^4.0.8",
+    "utf-8-validate": "^6.0.5"
+  }
+}
